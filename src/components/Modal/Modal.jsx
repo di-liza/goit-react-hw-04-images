@@ -6,7 +6,7 @@ import { createPortal } from 'react-dom';
 
 const modalRoot = document.getElementById('modal');
 
-export default function Modal({ activeCard, closeModal, showModal }) {
+export default function Modal({ activeCard, closeModal }) {
   const handleBackdropClose = event => {
     if (event.target === event.currentTarget) {
       closeModal();

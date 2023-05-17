@@ -90,11 +90,7 @@ export default function ImageGallery(props) {
         </GalleryList>
         {status === 'pending' && query && <Loader />}
         {showModal && (
-          <Modal
-            activeCard={activeCard}
-            closeModal={toggleModal}
-            showModal={showModal}
-          />
+          <Modal activeCard={activeCard} closeModal={toggleModal} />
         )}
 
         {!isEndOfListReached && status === 'resolved' && (
