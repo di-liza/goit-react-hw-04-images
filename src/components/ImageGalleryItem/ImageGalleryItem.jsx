@@ -3,10 +3,8 @@ import { Item } from './ImageGalleryItem.styled';
 import PropTypes from 'prop-types';
 
 export default function ImageGalleryItem({
-  webformatURL,
+  image: { webformatURL, tags, id },
   onCardClick,
-  tags,
-  idCard,
 }) {
   return (
     <>
@@ -17,7 +15,7 @@ export default function ImageGalleryItem({
           className="itemImg"
           loading="lazy"
           onClick={() => {
-            onCardClick(idCard);
+            onCardClick(id);
           }}
         />
       </Item>
@@ -26,8 +24,10 @@ export default function ImageGalleryItem({
 }
 
 ImageGalleryItem.propTypes = {
-  webformatURL: PropTypes.string.isRequired,
-  tags: PropTypes.string.isRequired,
+  image: PropTypes.shape({
+    tags: PropTypes.string.isRequired,
+    largeImageURL: PropTypes.string.isRequired,
+    id: PropTypes.node.isRequired,
+  }).isRequired,
   onCardClick: PropTypes.func.isRequired,
-  idCard: PropTypes.number.isRequired,
 };

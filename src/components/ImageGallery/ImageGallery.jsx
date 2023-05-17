@@ -80,13 +80,11 @@ export default function ImageGallery(props) {
     return (
       <>
         <GalleryList>
-          {images.map(({ id, webformatURL, tags }) => (
+          {images.map(image => (
             <ImageGalleryItem
-              key={id}
-              webformatURL={webformatURL}
+              key={image.id}
+              image={image}
               onCardClick={setActiveIndex}
-              tags={tags}
-              idCard={id}
             />
           ))}
         </GalleryList>
