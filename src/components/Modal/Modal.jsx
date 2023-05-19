@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { Backdrop } from './Modal.styled';
 import PropTypes from 'prop-types';
 
@@ -6,33 +6,32 @@ import { createPortal } from 'react-dom';
 
 const modalRoot = document.getElementById('modal');
 
-export default function Modal({ activeCard, closeModal }) {
+export default function Modal({
+  activeCard: { largeImageURL, tags },
+  closeModal,
+}) {
   const handleBackdropClose = event => {
     if (event.target === event.currentTarget) {
       closeModal();
     }
   };
-  const handleKeyDown = useCallback(
-    event => {
+
+  useEffect(() => {
+    const handleKeyDown = event => {
       if (event.code === 'Escape') {
         closeModal();
       }
-    },
-    [closeModal]
-  );
-  useEffect(() => {
-    window.removeEventListener('keydown', handleKeyDown);
+    };
     window.addEventListener('keydown', handleKeyDown);
-  }, [handleKeyDown]);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [closeModal]);
 
   return createPortal(
     <Backdrop onClick={handleBackdropClose}>
       <div className="modal">
-        <img
-          src={activeCard.largeImageURL}
-          alt={activeCard.tags}
-          className="modalImg"
-        />
+        <img src={largeImageURL} alt={tags} className="modalImg" />
       </div>
     </Backdrop>,
     modalRoot
