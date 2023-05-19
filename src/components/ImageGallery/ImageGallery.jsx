@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import PixabayApi from '../services/pixabay-api';
-import Button from 'components/Button/Button';
 
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 
+import { fetchImages } from '../services/pixabay-api';
+import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
+import Modal from '../Modal';
+import Button from 'components/Button/Button';
 import Loader from '../Loader';
 
 import { GalleryList, ErrorMessage } from './ImageGallery.styled';
 
-import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
-import Modal from '../Modal';
-
-import { toast } from 'react-toastify';
-
-export default function ImageGallery(props) {
+export default function ImageGallery({ searchQuery }) {
   const [images, setImages] = useState([]);
   const [page, setPage] = useState(1);
   const [error, setError] = useState(false);
@@ -26,8 +24,13 @@ export default function ImageGallery(props) {
     setStatus('pending');
 
     if (query) {
-      PixabayApi.fetchPixabay(query, page)
-        .then(({ totalHits, total, hits }) => {
+      const getCollction = async () => {
+        setStatus('pending');
+        try {
+          const {
+            data: { hits, total, totalHits },
+          } = await fetchImages(query, page);
+
           if (!total || !totalHits) {
             setStatus('idle');
             return toast.warning('Not found images for this query. Try again.');
@@ -39,20 +42,21 @@ export default function ImageGallery(props) {
           }
           setImages(prev => [...prev, ...hits]);
           setStatus('resolved');
-        })
-        .catch(error => {
+        } catch (error) {
           setError(error);
           setStatus('rejected');
-        });
+        }
+      };
+      getCollction();
     }
   }, [query, page]);
 
   useEffect(() => {
-    setQuery(props.searchQuery);
+    setQuery(searchQuery);
     setImages([]);
     setError(false);
     setPage(1);
-  }, [props]);
+  }, [searchQuery]);
 
   const handleLoadMoreBTN = () => {
     setPage(prev => prev + 1);
