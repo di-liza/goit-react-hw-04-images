@@ -71,6 +71,7 @@ export default function ImageGallery({ searchQuery }) {
   };
 
   useEffect(() => {
+    console.log('svsv');
     if (galleryListRef.current && page > 1) {
       if (galleryListRef.current.firstElementChild) {
         const { height } =
