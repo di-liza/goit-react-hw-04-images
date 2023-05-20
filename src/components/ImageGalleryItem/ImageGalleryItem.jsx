@@ -26,7 +26,7 @@ export default function ImageGalleryItem({
 ImageGalleryItem.propTypes = {
   image: PropTypes.shape({
     tags: PropTypes.string.isRequired,
-    largeImageURL: PropTypes.string.isRequired,
+    webformatURL: PropTypes.string.isRequired,
     id: PropTypes.node.isRequired,
   }).isRequired,
   onCardClick: PropTypes.func.isRequired,
