@@ -14,7 +14,7 @@ export async function fetchImages(query, page) {
         per_page: 12,
       },
     });
-  } catch (err) {
-    return err;
+  } catch (error) {
+    return error;
   }
 }

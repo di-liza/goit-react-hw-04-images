@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
@@ -19,7 +19,7 @@ export default function ImageGallery({ searchQuery }) {
   const [query, setQuery] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [activeCardId, setActiveCardId] = useState(0);
-
+  const galleryListRef = useRef();
   useEffect(() => {
     setStatus('pending');
 
@@ -70,6 +70,20 @@ export default function ImageGallery({ searchQuery }) {
     setShowModal(prev => !prev);
   };
 
+  useEffect(() => {
+    if (galleryListRef.current && page > 1) {
+      if (galleryListRef.current.firstElementChild) {
+        const { height } =
+          galleryListRef.current.firstElementChild.getBoundingClientRect();
+        window.scrollBy({
+          top: height * 2,
+          behavior: 'smooth',
+          scroll: function () {},
+        });
+      }
+    }
+  }, [images, page]);
+
   const isEndOfListReached = images.length / 12 < page;
   const activeCard = images.find(({ id }) => id === activeCardId);
 
@@ -83,7 +97,7 @@ export default function ImageGallery({ searchQuery }) {
   if (status === 'resolved' || status === 'pending') {
     return (
       <>
-        <GalleryList>
+        <GalleryList ref={galleryListRef}>
           {images.map(image => (
             <ImageGalleryItem
               key={image.id}
